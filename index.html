@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTA Визуализатор</title>
+    <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+    <header>
+        <h1>DTA Analysis</h1>
+        <input type="file" id="csvInput" accept=".csv" onclick="this.value=null" />
+        <button id="resetZoomBtn" class="primary-btn" disabled>Сброс Zoom</button>
+        <button id="tangent1Btn" class="tangent-btn active" data-tangent="0">Линия 1</button>
+        <button id="tangent2Btn" class="tangent-btn" data-tangent="1">Линия 2</button>
+    </header>
+
+    <main>
+        <!-- 2. Инфо строка (Координаты и Ошибки) -->
+        <div class="info-bar">
+            <div id="coordinatesDisplay">Готов к загрузке</div>
+            <div id="errorMessage" role="alert">
+                <span id="errorText"></span>
+            </div>
+            <!-- Скрытый span для JS логики, если нужен -->
+            <span id="currentTangent" style="display:none"></span>
+        </div>
+
+        <!-- 3. Основной график (Flex 3) -->
+        <div class="chart-card main-chart">
+            <div class="chart-title">Термограмма (T vs Signal)</div>
+            <div class="chart-container">
+                <div id="placeholderText" class="placeholder-overlay">Загрузите CSV файл</div>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 4. График производной (Flex 2) -->
+        <div class="chart-card sub-chart">
+            <div class="chart-title">Производная (dDTA/dt)</div>
+            <div class="chart-container derivative-container">
+                <div id="placeholderTextDerivative" class="placeholder-overlay">Нет данных</div>
+                <canvas id="derivativeChart"></canvas>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

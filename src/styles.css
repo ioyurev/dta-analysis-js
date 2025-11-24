@@ -1,0 +1,197 @@
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-color: #f3f4f6;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --error-bg: #fef2f2;
+    --error-text: #ef4444;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Базовая структура приложения (App Shell) --- */
+html, body {
+    height: 100%; /* Занимаем всю высоту окна */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Запрещаем скролл страницы */
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;      /* Включаем Flexbox */
+    flex-direction: column; /* Вертикальная раскладка */
+}
+
+/* --- Header (фиксированная высота) --- */
+header {
+    background-color: var(--card-bg);
+    padding: 0.75rem 1.5rem; /* Уменьшенные отступы */
+    border-bottom: 1px solid var(--border-color);
+    flex: 0 0 auto; /* Не сжимать и не растягивать */
+    display: flex;
+    align-items: left;
+    /* justify-content: space-between; */
+}
+
+header h1 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--primary-color);
+}
+
+/* --- Main (растягиваемая область) --- */
+main {
+    flex: 1; /* Занимает всё оставшееся место */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem; /* Расстояние между карточками */
+    min-height: 0; /* Критично для вложенных скроллов/флексов */
+    max-width: 100%; /* Убираем ограничение по ширине */
+}
+
+/* --- Панель управления (фиксированная) --- */
+.control-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 0.75rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    flex: 0 0 auto; /* Фиксированный размер */
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Кнопки и инпуты */
+button, input[type="file"]::file-selector-button {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    background: white;
+    transition: all 0.2s;
+}
+
+button.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+button.primary-btn:hover { background-color: var(--primary-hover); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.tangent-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+/* Спец цвета для кнопок касательных при активности */
+.tangent-btn[data-tangent="0"].active { background-color: #ef4444; border-color: #ef4444; }
+.tangent-btn[data-tangent="1"].active { background-color: #10b981; border-color: #10b981; }
+
+/* --- Инфо панель (ошибки и координаты) --- */
+.info-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    min-height: 1.5rem;
+    flex: 0 0 auto;
+}
+
+#coordinatesDisplay {
+    font-family: monospace;
+    font-size: 0.85rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+}
+
+#errorMessage {
+    display: none;
+    color: var(--error-text);
+    font-size: 0.9rem;
+    background: var(--error-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+}
+#errorMessage.has-content { display: block; }
+
+/* --- Области графиков (Flexgrow) --- */
+/* Карточка графика - контейнер */
+.chart-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    min-height: 0; /* Важно для сжатия */
+    border: 1px solid var(--border-color);
+}
+
+/* Заголовки графиков */
+.chart-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Контейнер canvas внутри карточки */
+.chart-container {
+    flex: 1; /* Растягивается внутри карточки */
+    position: relative;
+    width: 100%;
+    min-height: 0; /* Позволяет графику уменьшаться */
+    overflow: hidden;
+}
+
+/* Пропорции графиков */
+.chart-card.main-chart {
+    flex: 3; /* Верхний график занимает 60% места (3 части) */
+}
+
+.chart-card.sub-chart {
+    flex: 2; /* Нижний график занимает 40% места (2 части) */
+}
+
+/* Canvas должен абсолютно заполнять контейнер */
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Placeholders */
+.placeholder-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(249, 250, 251, 0.8);
+    color: var(--text-secondary);
+    z-index: 10;
+    border: 2px dashed var(--border-color);
+    border-radius: 6px;
+}
+
+.hidden, .is-hidden { display: none !important; }
