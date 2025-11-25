@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import path from 'path';
 
 export default defineConfig({
   base: '/dta-analysis-js/',
@@ -25,10 +24,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['chart.js', 'chartjs-plugin-zoom', 'papaparse']
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
   }
 });

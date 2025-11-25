@@ -54,13 +54,7 @@ export default [
         KeyboardEvent: 'readonly',
         HTMLInputElement: 'readonly',
         HTMLCanvasElement: 'readonly',
-        // Node.js globals
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly'
+        DataTransfer: 'readonly'
       }
     },
     files: ['**/*.js', '**/*.mjs']

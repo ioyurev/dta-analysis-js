@@ -2,7 +2,6 @@
 import {
   Chart,
   LineController,
-  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -17,7 +16,6 @@ import './styles.css';
 // Регистрация Chart.js компонентов
 Chart.register(
   LineController,
-  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -39,12 +37,16 @@ const CONFIG = {
   DECIMATION_SAMPLES: 1500,
   DECIMATION_THRESHOLD: 3000,
   COLORS: {
-    MAIN_CHART: 'rgba(59, 130, 246, 1)',
-    DERIVATIVE_CHART: 'rgba(239, 68, 68, 1)',
-    TANGENT_1: 'rgba(239, 68, 68, 0.9)',
-    TANGENT_2: 'rgba(16, 185, 129, 0.9)'
+    MAIN_CHART: '#3b82f6',      // Синий
+    DERIVATIVE_CHART: '#ef4444', // Красный
+    TANGENT_1: '#3b82f6',        // Синий
+    TANGENT_2: '#f59e0b',        // Оранжевый
+    ERROR: '#ef4444',
+    SUCCESS: '#10b981',
+    WARNING: '#f59e0b',
+    INFO: '#3b82f6'
   },
-  TANGENT_NAMES: ['Линия 1 (Красная)', 'Линия 2 (Зеленая)']
+  TANGENT_NAMES: ['Касательная 1 (Синяя)', 'Касательная 2 (Оранжевая)']
 };
 
 // Центральное состояние приложения
@@ -79,38 +81,27 @@ const DataValidator = {
       return false;
     }
     return row.every(this.isValidNumber);
-  },
-  
-  sanitizeData(data) {
-    return data.filter(row => {
-      if (!Array.isArray(row) || row.length < 3) return false;
-      return row.every(this.isValidNumber);
-    });
   }
+  
 };
 
 // Модуль обработки ошибок
 const ErrorHandler = {
   showError(message) {
-    const errorText = document.getElementById('errorText');
-    const errorContainer = document.getElementById('errorMessage');
-    if (errorText && errorContainer) {
-      errorText.textContent = message;
-      errorContainer.classList.add('has-content');
+    if (AppState.elements.errorText && AppState.elements.errorContainer) {
+      AppState.elements.errorText.textContent = message;
+      AppState.elements.errorContainer.classList.add('has-content');
       // Показываем placeholder если он есть
-      const placeholderText = document.getElementById('placeholderText');
-      if (placeholderText) {
-        placeholderText.classList.remove('hidden');
+      if (AppState.elements.placeholderText) {
+        AppState.elements.placeholderText.classList.remove('is-hidden');
       }
     }
   },
   
   hideError() {
-    const errorContainer = document.getElementById('errorMessage');
-    const errorText = document.getElementById('errorText');
-    if (errorContainer && errorText) {
-      errorContainer.classList.remove('has-content');
-      errorText.textContent = '';
+    if (AppState.elements.errorContainer && AppState.elements.errorText) {
+      AppState.elements.errorContainer.classList.remove('has-content');
+      AppState.elements.errorText.textContent = '';
     }
   }
 };
@@ -119,7 +110,7 @@ const ErrorHandler = {
 // Модуль управления событиями
 const EventHandlerManager = {
   addHandler(canvas, event, handler, options = {}) {
-    const key = `${canvas.id}_${event}`;
+    const key = `${canvas.id}|${event}`;
     if (AppState.handlers[key]) {
       this.removeHandler(canvas, event);
     }
@@ -128,7 +119,7 @@ const EventHandlerManager = {
   },
   
   removeHandler(canvas, event) {
-    const key = `${canvas.id}_${event}`;
+    const key = `${canvas.id}|${event}`;
     if (AppState.handlers[key]) {
       canvas.removeEventListener(event, AppState.handlers[key].handler, AppState.handlers[key].options);
       delete AppState.handlers[key];
@@ -137,7 +128,7 @@ const EventHandlerManager = {
   
   removeAllHandlers() {
     Object.keys(AppState.handlers).forEach(key => {
-      const [canvasId, event] = key.split('_');
+      const [canvasId, event] = key.split('|');
       const canvas = document.getElementById(canvasId);
       if (canvas) {
         this.removeHandler(canvas, event);
@@ -170,9 +161,8 @@ const ChartRenderer = {
 
   renderMainChart(datasets, xLabel, yLabel, derivativePoints) {
     const ctx = document.getElementById('myChart').getContext('2d');
-    const placeholderText = document.getElementById('placeholderText');
-    if (placeholderText) {
-      placeholderText.classList.add('is-hidden');
+    if (AppState.elements.placeholderText) {
+      AppState.elements.placeholderText.classList.add('is-hidden');
     }
     
     const mainChartContainer = document.querySelector('.chart-container');
@@ -259,9 +249,8 @@ const ChartRenderer = {
 
   renderDerivativeChart(derivativePoints) {
     const ctx = document.getElementById('derivativeChart').getContext('2d');
-    const placeholderDerivative = document.getElementById('placeholderTextDerivative');
-    if (placeholderDerivative) {
-      placeholderDerivative.classList.add('is-hidden');
+    if (AppState.elements.placeholderDerivative) {
+      AppState.elements.placeholderDerivative.classList.add('is-hidden');
     }
     
     const derivativeChartContainer = document.querySelector('.chart-container.derivative-container');
@@ -312,10 +301,10 @@ const ChartRenderer = {
         scales: {
           x: {
             type: 'linear',
-            title: { display: true, text: 'Temperature (°C)', font: { weight: 'bold' } }
+            title: { display: true, text: 'Температура (°C)', font: { weight: 'bold' } }
           },
           y: {
-            title: { display: true, text: 'dDTA/dt (a.u./s)', font: { weight: 'bold' } }
+            title: { display: true, text: 'dDTA/dt (у.е./с)', font: { weight: 'bold' } }
           }
         }
       }
@@ -341,10 +330,10 @@ const ChartRenderer = {
       const temp = AppState.charts.main.scales.x.getValueForPixel(x);
       const signal = AppState.charts.main.scales.y.getValueForPixel(y);
       
-      updateCoordinatesDisplay(temp, signal);
+      UIController.updateCoordinatesDisplay(temp, signal);
     };
 
-    const mouseLeaveHandler = () => updateCoordinatesDisplay(null, null);
+    const mouseLeaveHandler = () => UIController.updateCoordinatesDisplay(null, null);
 
     EventHandlerManager.addHandler(canvas, 'mousemove', mouseMoveHandler);
     EventHandlerManager.addHandler(canvas, 'mouseleave', mouseLeaveHandler);
@@ -374,7 +363,7 @@ const ChartRenderer = {
           Math.abs(curr.x - nearest.x) < Math.abs(prev.x - nearest.x) ? curr : prev
         );
 
-        drawTangent(slope, mainPoint.x, mainPoint.y);
+        TangentManager.drawTangent(slope, mainPoint.x, mainPoint.y);
       }
     };
 
@@ -459,7 +448,13 @@ const UIController = {
     AppState.elements.coordinatesDisplay = document.getElementById('coordinatesDisplay');
     AppState.elements.tangent1Btn = document.getElementById('tangent1Btn');
     AppState.elements.tangent2Btn = document.getElementById('tangent2Btn');
+    AppState.elements.tangentStatus = document.getElementById('tangentStatus');
     AppState.elements.currentTangentSpan = document.getElementById('currentTangent');
+    AppState.elements.tangentStatusAria = document.getElementById('tangentStatusAria');
+    AppState.elements.helpBtn = document.getElementById('helpBtn');
+    AppState.elements.helpModal = document.getElementById('helpModal');
+    AppState.elements.modalClose = document.querySelector('.modal-close');
+    AppState.elements.showHelpBtn = document.getElementById('showHelpBtn');
   },
 
   initializeEventListeners() {
@@ -470,8 +465,34 @@ const UIController = {
       AppState.elements.resetZoomBtn.addEventListener('click', handleResetZoom);
     }
     if (AppState.elements.tangent1Btn && AppState.elements.tangent2Btn) {
-      AppState.elements.tangent1Btn.addEventListener('click', () => switchTangent(0));
-      AppState.elements.tangent2Btn.addEventListener('click', () => switchTangent(1));
+      AppState.elements.tangent1Btn.addEventListener('click', () => UIController.switchTangent(0));
+      AppState.elements.tangent2Btn.addEventListener('click', () => UIController.switchTangent(1));
+    }
+    
+    // Help modal functionality
+    if (AppState.elements.helpBtn) {
+      AppState.elements.helpBtn.addEventListener('click', showHelpModal);
+    }
+    if (AppState.elements.modalClose) {
+      AppState.elements.modalClose.addEventListener('click', hideHelpModal);
+    }
+    if (AppState.elements.helpModal) {
+      AppState.elements.helpModal.addEventListener('click', (e) => {
+        if (e.target === AppState.elements.helpModal) {
+          hideHelpModal();
+        }
+      });
+    }
+    if (AppState.elements.showHelpBtn) {
+      AppState.elements.showHelpBtn.addEventListener('click', showHelpModal);
+    }
+    
+    // Drag & Drop для плейсхолдера
+    const placeholder = document.getElementById('placeholderText');
+    if (placeholder) {
+      placeholder.addEventListener('dragover', handleDragOver);
+      placeholder.addEventListener('dragleave', handleDragLeave);
+      placeholder.addEventListener('drop', handleDrop);
     }
   },
 
@@ -482,19 +503,65 @@ const UIController = {
       AppState.elements.tangent1Btn.classList.toggle('active', index === 0);
       AppState.elements.tangent2Btn.classList.toggle('active', index === 1);
       
+      // ✅ Исправление ARIA-атрибутов для доступности
+      AppState.elements.tangent1Btn.setAttribute('aria-pressed', index === 0);
+      AppState.elements.tangent2Btn.setAttribute('aria-pressed', index === 1);
+      
       const tangentNames = CONFIG.TANGENT_NAMES;
       if (AppState.elements.currentTangentSpan) {
         AppState.elements.currentTangentSpan.textContent = `Активна: ${tangentNames[index]}`;
       }
+      
+      // Обновляем визуальные индикаторы статуса
+      this.updateTangentStatus();
     }
     
     if (AppState.charts.main && AppState.charts.main.tooltip.getActiveElements().length > 0) {
       const tooltip = AppState.charts.main.tooltip;
       const temp = AppState.charts.main.scales.x.getValueForPixel(tooltip.caretX);
       const signal = AppState.charts.main.scales.y.getValueForPixel(tooltip.caretY);
-      updateCoordinatesDisplay(temp, signal);
+      UIController.updateCoordinatesDisplay(temp, signal);
     }
   },
+
+  updateTangentStatus() {
+    if (!AppState.elements.tangentStatus) return;
+    
+    const statusItems = AppState.elements.tangentStatus.querySelectorAll('.tangent-status-item');
+    
+    statusItems.forEach((item, index) => {
+      const isActive = index === AppState.tangents.activeIndex;
+      const isDrawn = AppState.tangents.data[index] !== null;
+      
+      item.classList.toggle('active', isActive);
+      item.classList.toggle('drawn', isDrawn);
+      
+      const dot = item.querySelector('.tangent-status-dot');
+      if (dot) {
+        dot.classList.toggle('pending', !isDrawn);
+        dot.classList.toggle('drawn', isDrawn);
+      }
+    });
+    
+    // Обновляем ARIA-описание для скринридеров
+    if (AppState.elements.tangentStatusAria) {
+      const activeName = CONFIG.TANGENT_NAMES[AppState.tangents.activeIndex];
+      const drawnCount = AppState.tangents.data.filter(t => t !== null).length;
+      const total = AppState.tangents.data.length;
+      
+      let statusText = `Активная касательная: ${activeName}. `;
+      statusText += `Построено касательных: ${drawnCount} из ${total}. `;
+      
+      if (drawnCount === total) {
+        statusText += 'Все касательные построены.';
+      } else {
+        statusText += 'Кликните по графику производной для построения касательной.';
+      }
+      
+      AppState.elements.tangentStatusAria.textContent = statusText;
+    }
+  },
+
 
   updateCoordinatesDisplay(temp, signal) {
     if (AppState.elements.coordinatesDisplay) {
@@ -518,11 +585,6 @@ document.addEventListener('DOMContentLoaded', function() {
   UIController.initializeEventListeners();
 });
 
-// Функция для переключения активной касательной
-function switchTangent(index) {
-  UIController.switchTangent(index);
-}
-
 function handleFileUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -533,10 +595,8 @@ function handleFileUpload(e) {
   }
   
   // Show placeholders
-  const placeholderText = document.getElementById('placeholderText');
-  const placeholderDerivative = document.getElementById('placeholderTextDerivative');
-  if (placeholderText) placeholderText.classList.remove('is-hidden');
-  if (placeholderDerivative) placeholderDerivative.classList.remove('is-hidden');
+  if (AppState.elements.placeholderText) AppState.elements.placeholderText.classList.remove('is-hidden');
+  if (AppState.elements.placeholderDerivative) AppState.elements.placeholderDerivative.classList.remove('is-hidden');
 
   // Destroy existing charts properly
   ChartRenderer.destroyCharts();
@@ -564,8 +624,8 @@ function handleFileUpload(e) {
       }
       processDataAndRender(results.data);
     },
-    error: function() {
-      ErrorHandler.showError('Не удалось прочитать файл.');
+    error: function(error) {
+      ErrorHandler.showError('Не удалось прочитать файл: ' + error.message);
     }
   });
 }
@@ -709,11 +769,83 @@ function calculateDynamicYScaling(xMin, xMax) {
   }
 }
 
-// --- Interaction Logic ---
-
-function updateCoordinatesDisplay(temp, signal) {
-  UIController.updateCoordinatesDisplay(temp, signal);
+// --- Modal Help Functions ---
+function showHelpModal() {
+  if (AppState.elements.helpModal) {
+    AppState.elements.helpModal.classList.remove('is-hidden');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    
+    // Focus the close button for accessibility
+    if (AppState.elements.modalClose) {
+      AppState.elements.modalClose.focus();
+    }
+  }
 }
-function drawTangent(slope, x0, y0) {
-  TangentManager.drawTangent(slope, x0, y0);
+
+function hideHelpModal() {
+  if (AppState.elements.helpModal) {
+    AppState.elements.helpModal.classList.add('is-hidden');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+}
+
+// --- Keyboard Navigation ---
+document.addEventListener('keydown', (e) => {
+  // Escape key closes modal
+  if (e.key === 'Escape' && AppState.elements.helpModal && 
+      !AppState.elements.helpModal.classList.contains('is-hidden')) {
+    hideHelpModal();
+  }
+  
+  // Tab navigation within modal
+  if (e.key === 'Tab' && AppState.elements.helpModal && 
+      !AppState.elements.helpModal.classList.contains('is-hidden')) {
+    const focusableElements = AppState.elements.helpModal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+    
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        lastElement.focus();
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        firstElement.focus();
+        e.preventDefault();
+      }
+    }
+  }
+});
+
+// --- Drag & Drop Functions ---
+function handleDragOver(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.classList.add('placeholder--dragover');
+}
+
+function handleDragLeave(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.classList.remove('placeholder--dragover');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.classList.remove('placeholder--dragover');
+  
+  const files = e.dataTransfer.files;
+  if (files.length > 0 && files[0].name.endsWith('.csv')) {
+    // Симулируем выбор файла через input
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(files[0]);
+    AppState.elements.csvInput.files = dataTransfer.files;
+    
+    // Триггерим событие change
+    AppState.elements.csvInput.dispatchEvent(new Event('change'));
+  }
 }
