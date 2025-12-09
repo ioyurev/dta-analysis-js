@@ -1,0 +1,178 @@
+/**
+ * Chart Card Components
+ */
+
+/* =========================================================================
+   BASE CARD
+   ========================================================================= */
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.chart-card--main {
+  flex: 3;
+  min-height: 200px;
+}
+
+.chart-card--derivative {
+  flex: 2;
+  min-height: 150px;
+}
+
+/* =========================================================================
+   CARD HEADER
+   ========================================================================= */
+
+.chart-card__header {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-neutral-50);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.chart-card__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.chart-card__hint {
+  flex: 1;
+  min-width: 200px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-style: italic;
+  color: var(--color-primary-600);
+  text-align: center;
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  border-radius: var(--radius-md);
+  margin: 0;
+}
+
+.chart-card__hint[hidden] {
+  display: none;
+}
+
+.chart-card__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-inline-start: auto;
+}
+
+/* =========================================================================
+   CARD BODY
+   ========================================================================= */
+
+.chart-card__body {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  padding: var(--space-3);
+}
+
+/* =========================================================================
+   PLACEHOLDER
+   ========================================================================= */
+
+.placeholder {
+  position: absolute;
+  inset: var(--space-3);
+  z-index: var(--z-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(249, 250, 251, 0.95);
+  border: 2px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.placeholder[hidden] {
+  display: none;
+}
+
+.placeholder__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 280px;
+  padding: var(--space-6);
+  text-align: center;
+  cursor: default;
+}
+
+.placeholder__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  transition: transform var(--duration-normal) var(--easing-default);
+}
+
+.placeholder__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  transition: color var(--duration-normal) var(--easing-default);
+}
+
+.placeholder__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.placeholder__hint {
+  margin-block-start: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-500);
+}
+
+/* Interactive Placeholder */
+.placeholder--interactive {
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--easing-default);
+}
+
+.placeholder--interactive:hover,
+.placeholder--interactive:focus-within {
+  border-color: var(--color-primary-400);
+  background: rgba(239, 246, 255, 0.95);
+}
+
+.placeholder--interactive:hover .placeholder__icon,
+.placeholder--interactive:focus-within .placeholder__icon {
+  transform: scale(1.15);
+}
+
+.placeholder--interactive:hover .placeholder__title,
+.placeholder--interactive:focus-within .placeholder__title {
+  color: var(--color-primary-600);
+}
+
+.placeholder--interactive:active {
+  transform: scale(0.995);
+}
+
+/* Drag Over State */
+.placeholder--dragover {
+  border-color: var(--color-primary-500);
+  border-style: solid;
+  background: rgba(219, 234, 254, 0.95);
+}
+
+.placeholder--dragover .placeholder__icon {
+  transform: scale(1.2);
+}

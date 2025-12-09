@@ -54,7 +54,12 @@ export default [
         KeyboardEvent: 'readonly',
         HTMLInputElement: 'readonly',
         HTMLCanvasElement: 'readonly',
-        DataTransfer: 'readonly'
+        HTMLSelectElement: 'readonly',
+        DataTransfer: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        requestAnimationFrame: 'readonly',
+        fetch: 'readonly'
       }
     },
     files: ['**/*.js', '**/*.mjs']

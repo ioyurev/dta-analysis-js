@@ -1,0 +1,121 @@
+/**
+ * Results Panel Styles
+ */
+
+/* =========================================================================
+   RESULTS PANEL
+   ========================================================================= */
+
+.results-panel {
+  flex-shrink: 0;
+  padding: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.results-panel[hidden] {
+  display: none;
+}
+
+.results-panel__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-4);
+  font-size: var(--font-size-md);
+}
+
+/* =========================================================================
+   RESULTS LIST
+   ========================================================================= */
+
+.results-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.results-list__item {
+  padding: var(--space-3);
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.results-list__item[hidden] {
+  display: none;
+}
+
+.results-list__item--highlight {
+  background: var(--color-success-50);
+  border-color: var(--color-success-500);
+}
+
+.results-list__term {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.results-list__value {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+}
+
+/* =========================================================================
+   RESULT VALUES
+   ========================================================================= */
+
+.result-equation {
+  padding: var(--space-2);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+}
+
+.result-equation output {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.result-slope {
+  color: var(--color-text-primary);
+}
+
+.result-point {
+  color: var(--color-text-secondary);
+}
+
+.result-intersection {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-success-600);
+}
+
+/* =========================================================================
+   TANGENT COLOR INDICATORS
+   ========================================================================= */
+
+.tangent-color {
+  display: inline-block;
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.tangent-color--1 {
+  background: var(--color-tangent-1);
+}
+
+.tangent-color--2 {
+  background: var(--color-tangent-2);
+}

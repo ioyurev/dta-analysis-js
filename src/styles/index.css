@@ -1,0 +1,35 @@
+/**
+ * DTA Trainer - Main Stylesheet
+ * Импорт всех модулей в правильном порядке
+ */
+
+/* 1. Дизайн-токены (переменные) */
+@import './variables.css';
+
+/* 2. Сброс и базовые стили */
+@import './reset.css';
+
+/* 3. Типографика */
+@import './typography.css';
+
+/* 4. Раскладка */
+@import './layout.css';
+
+/* 5. Компоненты */
+@import './buttons.css';
+@import './forms.css';
+@import './cards.css';
+@import './charts.css';
+@import './modals.css';
+@import './feedback.css';
+@import './results.css';
+@import './demo.css';
+
+/* 6. Утилиты */
+@import './utilities.css';
+
+/* 7. Темы */
+@import './theme-dark.css';
+
+/* 8. Адаптивность */
+@import './responsive.css';

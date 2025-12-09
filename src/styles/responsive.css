@@ -1,0 +1,175 @@
+/**
+ * Responsive Styles
+ */
+
+/* =========================================================================
+   SMALL SCREENS (Mobile)
+   ========================================================================= */
+
+@media (max-width: 640px) {
+  :root {
+    --space-4: 0.75rem;
+    --space-6: 1rem;
+  }
+  
+  header {
+    flex-wrap: wrap;
+    padding: var(--space-3);
+  }
+
+  header h1 {
+    font-size: var(--font-size-lg);
+  }
+
+  .file-label-text {
+    display: none;
+  }
+
+  .sample-select {
+    min-width: 150px;
+    font-size: var(--font-size-xs);
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .chart-card__header {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .chart-card__controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .tangent-btn__label {
+    display: none;
+  }
+
+  .tangent-btn {
+    padding: var(--space-2);
+    padding-inline-start: var(--space-6);
+  }
+
+  .chart-card__hint {
+    order: 10;
+    width: 100%;
+    margin-block-start: var(--space-2);
+  }
+
+  .results-list {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .hint-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .demo-overlay__content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .info-bar {
+    flex-wrap: wrap;
+  }
+
+  .coordinates {
+    width: 100%;
+    order: 10;
+  }
+}
+
+/* =========================================================================
+   MEDIUM SCREENS (Tablet)
+   ========================================================================= */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .chart-card--main {
+    flex: 2;
+  }
+
+  .chart-card--derivative {
+    flex: 1;
+  }
+}
+
+/* =========================================================================
+   LARGE SCREENS
+   ========================================================================= */
+
+@media (min-width: 1440px) {
+  main {
+    max-width: 1600px;
+    margin-inline: auto;
+  }
+}
+
+/* =========================================================================
+   PRINT STYLES
+   ========================================================================= */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  header,
+  .info-bar,
+  .chart-card__controls,
+  .modal,
+  .loading-overlay,
+  .skip-link,
+  .hint-panel,
+  .demo-overlay {
+    display: none !important;
+  }
+
+  main {
+    padding: 0;
+    overflow: visible;
+  }
+
+  .chart-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .results-panel {
+    break-inside: avoid;
+  }
+}
+
+/* =========================================================================
+   HIGH CONTRAST MODE
+   ========================================================================= */
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: var(--color-neutral-700);
+    --color-border-strong: var(--color-neutral-800);
+  }
+
+  .btn {
+    border-width: 2px;
+  }
+
+  .placeholder {
+    border-width: 3px;
+  }
+
+  :focus-visible {
+    outline-width: 3px;
+  }
+}

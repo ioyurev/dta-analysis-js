@@ -3,138 +3,335 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTA Визуализатор</title>
+    <meta name="description" content="Учебный тренажёр для анализа данных DTA">
+    <meta name="theme-color" content="#2563eb">
+    <title>DTA Тренажёр</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
     <script type="module" src="/src/main.js"></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Перейти к основному содержимому</a>
+
     <header role="banner">
-        <h1>DTA Визуализатор</h1>
-        <div class="file-upload__wrapper">
-            <label for="csvInput" class="file-label" aria-label="Загрузить CSV файл с данными DTA">
-                <span class="file-icon" aria-hidden="true">📁</span>
-                <span>Загрузить CSV</span>
-            </label>
-            <input type="file" id="csvInput" accept=".csv" onclick="this.value=null" 
-                   aria-describedby="fileHelpText" />
+        <h1>DTA Тренажёр</h1>
+        
+        <!-- Выбор примера -->
+        <div class="sample-select-wrapper">
+            <label for="sampleSelect" class="sr-only">Выберите пример данных</label>
+            <select id="sampleSelect" class="sample-select">
+                <option value="">📂 Выберите пример...</option>
+                <option value="sample">Плавление образца Al-Si</option>
+            </select>
         </div>
-        <button id="helpBtn" class="help-btn" aria-label="Показать помощь">?</button>
+
+        <!-- Загрузка файла -->
+        <div class="file-upload">
+            <label for="csvInput" class="file-label">
+                <span class="file-icon" aria-hidden="true">📁</span>
+                <span class="file-label-text">Свой файл</span>
+            </label>
+            <input 
+                type="file" 
+                id="csvInput" 
+                accept=".csv"
+                aria-describedby="fileFormatHint"
+            >
+            <span id="fileFormatHint" class="sr-only">
+                Формат: CSV с колонками Time, Temperature, DTA
+            </span>
+        </div>
+
+        <div class="header-actions">
+            <span id="fileName" class="file-name" aria-live="polite"></span>
+            
+            <!-- Кнопка переключения темы -->
+            <button 
+                type="button"
+                id="themeToggle" 
+                class="theme-toggle"
+                aria-label="Переключить тему оформления"
+                title="Переключить тему"
+            >
+                <span class="theme-toggle__icon--light" aria-hidden="true">🌙</span>
+                <span class="theme-toggle__icon--dark" aria-hidden="true">☀️</span>
+            </button>
+            
+            <!-- Кнопка демо -->
+            <button 
+                type="button"
+                id="demoBtn" 
+                class="btn btn--secondary"
+                disabled
+                aria-label="Запустить демонстрацию"
+            >
+                <span aria-hidden="true">▶️</span>
+                <span class="btn-text">Демо</span>
+            </button>
+            
+            <button 
+                type="button"
+                id="helpBtn" 
+                class="btn btn--icon btn--icon-round" 
+                aria-label="Показать справку"
+                aria-haspopup="dialog"
+            >
+                <span aria-hidden="true">?</span>
+            </button>
+        </div>
     </header>
 
-    <!-- Онбординг/справка -->
-    <div id="helpModal" class="modal-overlay is-hidden" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
-        <div class="modal-content" role="document">
-            <div class="modal-header">
-                <h2 id="helpModalTitle">Как пользоваться DTA Визуализатором</h2>
-                <button class="modal-close" aria-label="Закрыть">×</button>
+    <!-- Модальное окно справки -->
+    <dialog id="helpModal" class="modal" aria-labelledby="helpModalTitle">
+        <div class="modal__content">
+            <header class="modal__header">
+                <h2 id="helpModalTitle">Как работать с тренажёром</h2>
+                <button 
+                    type="button"
+                    class="modal__close" 
+                    aria-label="Закрыть справку"
+                    data-close-modal
+                >
+                    <span aria-hidden="true">×</span>
+                </button>
+            </header>
+            
+            <div class="modal__body">
+                <section class="help-section">
+                    <h3>
+                        <span aria-hidden="true">🎯</span>
+                        Цель работы
+                    </h3>
+                    <p>
+                        Определить температуру фазового перехода методом касательных.
+                        Точка пересечения двух касательных даёт искомую температуру.
+                    </p>
+                </section>
+
+                <section class="help-section">
+                    <h3>
+                        <span aria-hidden="true">📋</span>
+                        Порядок работы
+                    </h3>
+                    <ol>
+                        <li>Выберите пример или загрузите свои данные</li>
+                        <li>Изучите график производной (dDTA/dt)</li>
+                        <li>Найдите начало пика — резкий подъём кривой</li>
+                        <li>Кликните в точке перегиба для первой касательной</li>
+                        <li>Переключитесь на «Касательная 2»</li>
+                        <li>Найдите область после пика и постройте вторую касательную</li>
+                        <li>Прочитайте температуру в панели результатов</li>
+                    </ol>
+                </section>
+                
+                <section class="help-section">
+                    <h3>
+                        <span aria-hidden="true">💡</span>
+                        Подсказки
+                    </h3>
+                    <p>
+                        Используйте кнопку <strong>«Подсказка»</strong> если затрудняетесь.
+                        Кнопка <strong>«Демо»</strong> покажет правильное построение автоматически.
+                    </p>
+                </section>
+
+                <section class="help-section">
+                    <h3>
+                        <span aria-hidden="true">🔍</span>
+                        Управление графиком
+                    </h3>
+                    <ul>
+                        <li><strong>Зум:</strong> выделите область мышью</li>
+                        <li><strong>Сброс:</strong> кнопка «Сбросить зум»</li>
+                    </ul>
+                </section>
             </div>
-            <div class="modal-body">
-                <div class="help-section">
-                    <h3>📋 Формат данных</h3>
-                    <p>Загрузите CSV файл с 3 колонками:</p>
-                    <ul>
-                        <li><strong>Time</strong> - время измерения</li>
-                        <li><strong>Temperature</strong> - температура (°C)</li>
-                        <li><strong>DTA</strong> - сигнал дифференциальной термоанализа</li>
-                    </ul>
-                </div>
-                
-                <div class="help-section">
-                    <h3>🚀 Управление графиками</h3>
-                    <ul>
-                        <li><strong>Зум:</strong> выделением мышью прямоугольной области</li>
-                        <li><strong>Сброс:</strong> кнопка "Сбросить зум"</li>
-                    </ul>
-                </div>
-                
-                <div class="help-section">
-                    <h3>🎯 Построение касательных</h3>
-                    <ul>
-                        <li>Выберите "Линию 1" или "Линию 2" для рисования</li>
-                        <li>Кликните по графику производной в нужной точке</li>
-                        <li>Касательная построится автоматически</li>
-                        <li>Каждая линия может быть построена только один раз</li>
-                    </ul>
-                </div>
-                
-                <div class="help-section">
-                    <h3>ℹ️ DTA (Differential Thermal Analysis)</h3>
-                    <p>Метод термического анализа, сравнивающий температуру образца с эталоном. 
-                    Пик на графике указывает на фазовый переход или химическую реакцию.</p>
-                </div>
+
+            <footer class="modal__footer">
+                <button type="button" class="btn btn--primary" data-close-modal>
+                    Понятно
+                </button>
+            </footer>
+        </div>
+    </dialog>
+
+    <!-- Основное содержимое -->
+    <main id="main-content">
+        <!-- Информационная панель -->
+        <div class="info-bar" role="region" aria-label="Информационная панель">
+            <output id="coordinatesDisplay" class="coordinates" aria-live="polite">
+                Выберите пример или загрузите данные
+            </output>
+            
+            <!-- Панель подсказок -->
+            <div id="hintPanel" class="hint-panel" hidden>
+                <span id="hintText" class="hint-panel__text"></span>
+                <button 
+                    type="button" 
+                    id="nextHintBtn" 
+                    class="btn btn--small"
+                    aria-label="Следу��щая подсказка"
+                >
+                    Подсказка 💡
+                </button>
+            </div>
+            
+            <div id="errorMessage" class="error-message" role="alert" aria-live="assertive" hidden>
+                <span class="error-message__icon" aria-hidden="true">⚠️</span>
+                <span id="errorText" class="error-message__text"></span>
+                <button 
+                    type="button"
+                    class="error-message__dismiss" 
+                    aria-label="Скрыть сообщение об ошибке"
+                    data-dismiss-error
+                >
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
         </div>
-    </div>
 
-    <main>
-        <!-- 2. Инфо строка (Координаты и Ошибки) -->
-        <div class="info-bar">
-            <div id="coordinatesDisplay" role="status" aria-live="polite">Готов к загрузке</div>
-            <div id="errorMessage" role="alert" aria-live="assertive">
-                <span id="errorText"></span>
+        <!-- Индикатор загрузки -->
+        <div id="loadingIndicator" class="loading-overlay" hidden aria-live="polite">
+            <div class="loading-spinner" role="status">
+                <svg class="spinner-icon" viewBox="0 0 50 50" aria-hidden="true">
+                    <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="4"></circle>
+                </svg>
+                <span class="loading-text">Обработка данных...</span>
             </div>
-            <!-- Скрытый span для JS логики, если нужен -->
-            <span id="currentTangent" class="is-hidden"></span>
-            <!-- Добавляем элемент для отслеживания статуса касательных для скринридеров -->
-            <div id="tangentStatusAria" class="sr-only" role="status" aria-live="polite"></div>
-            <!-- Добавляем элементы, которые ищутся в JavaScript -->
-            <div id="tangentStatus" class="tangent-status"></div>
-            <button id="showHelpBtn" class="help-btn" aria-label="Показать помощь" style="display: none;">?</button>
         </div>
 
-        <!-- 3. Основной график -->
-        <figure class="card chart-card main-chart">
-            <div class="card__header chart-header">
-                <div class="chart-title">Термограмма ДTA</div>
+        <!-- Оверлей демо-режима -->
+        <div id="demoOverlay" class="demo-overlay" hidden>
+            <div class="demo-overlay__content">
+                <div class="demo-overlay__step">
+                    <span id="demoStepNumber" class="demo-step-number">1</span>
+                    <span id="demoStepText" class="demo-step-text"></span>
+                </div>
+                <button type="button" id="stopDemoBtn" class="btn btn--secondary">
+                    Остановить демо
+                </button>
             </div>
-            <div class="card__body chart-container" role="img" aria-label="Основной график DTA термограммы">
-                <!-- Превращаем в label для синхронизации с input -->
-                <label for="csvInput" id="placeholderText" class="placeholder placeholder--clickable" tabindex="0">
-                    <div class="placeholder__content">
-                        <span class="placeholder__icon" aria-hidden="true">📁</span>
-                        <h3 class="placeholder__title">Загрузите CSV файл</h3>
-                        <p class="placeholder__text">Формат: время, температура, DTA сигнал</p>
-                        <span class="placeholder__hint">Кликните или перетащите файл сюда</span>
-                    </div>
-                </label>
-                <canvas id="myChart" style="cursor: default;" 
-                        aria-label="График термограммы DTA"></canvas>
+        </div>
+
+        <!-- Основной график DTA -->
+        <figure class="chart-card chart-card--main">
+            <figcaption class="chart-card__header">
+                <h2 class="chart-card__title">Термограмма DTA</h2>
+                
+                <!-- Индикатор точки клика -->
+                <div id="clickPointInfo" class="click-point-info" hidden>
+                    <span class="click-point-info__label">Точка касательной:</span>
+                    <output id="clickPointValue" class="click-point-info__value"></output>
+                </div>
+            </figcaption>
+            
+            <div class="chart-card__body">
+                <div id="mainChartPlaceholder" class="placeholder placeholder--interactive">
+                    <label class="placeholder__content">
+                        <span class="placeholder__icon" aria-hidden="true">📊</span>
+                        <span class="placeholder__title">Начните работу</span>
+                        <span class="placeholder__subtitle">Выберите пример из списка выше</span>
+                        <span class="placeholder__hint">или загрузите свой CSV файл</span>
+                    </label>
+                    <input type="file" id="mainChartFileInput" accept=".csv" style="display: none;">
+                </div>
+                <canvas 
+                    id="mainChart" 
+                    class="chart-canvas"
+                    role="img" 
+                    aria-label="График термограммы DTA"
+                ></canvas>
             </div>
-            <figcaption class="sr-only">График дифференциального термического анализа</figcaption>
         </figure>
 
-        <!-- 4. График производной -->
-        <figure class="card chart-card sub-chart">
-            <div class="card__header chart-header">
-                <div class="chart-title">Производная (dDTA/dt)</div>
-                <div class="hint">👆 Кликните по графику производной для построения касательной</div>
-                <div class="tangent-controls" role="group" aria-label="Управление касательными">
-                    <button id="tangent1Btn" class="btn tangent-btn active" data-tangent="0" 
-                            aria-label="Выбрать первую касательную (синяя)" 
-                            aria-pressed="true"
-                            title="Кликните по графику производной для построения касательной">
-                        Касательная 1
+        <!-- График производной -->
+        <figure class="chart-card chart-card--derivative">
+            <figcaption class="chart-card__header">
+                <h2 class="chart-card__title">Производная (dDTA/dt)</h2>
+                
+                <p id="tangentHint" class="chart-card__hint" hidden>
+                    👆 Кликните по графику для построения касательной
+                </p>
+                
+                <div class="chart-card__controls">
+                    <fieldset class="tangent-controls" role="radiogroup" aria-label="Выбор касательной">
+                        <legend class="sr-only">Выберите касательную для построения</legend>
+                        
+                        <button 
+                            type="button"
+                            id="tangent1Btn" 
+                            class="btn tangent-btn tangent-btn--1 is-active"
+                            role="radio"
+                            aria-checked="true"
+                            data-tangent-index="0"
+                            disabled
+                        >
+                            <span class="tangent-btn__indicator" aria-hidden="true"></span>
+                            <span class="tangent-btn__label">Касательная 1</span>
+                            <span class="tangent-btn__status sr-only">не построена</span>
+                        </button>
+                        
+                        <button 
+                            type="button"
+                            id="tangent2Btn" 
+                            class="btn tangent-btn tangent-btn--2"
+                            role="radio"
+                            aria-checked="false"
+                            data-tangent-index="1"
+                            disabled
+                        >
+                            <span class="tangent-btn__indicator" aria-hidden="true"></span>
+                            <span class="tangent-btn__label">Касательная 2</span>
+                            <span class="tangent-btn__status sr-only">не построена</span>
+                        </button>
+                    </fieldset>
+                    
+                    <button 
+                        type="button"
+                        id="clearTangentsBtn" 
+                        class="btn btn--ghost"
+                        disabled
+                        aria-label="Удалить все касательные"
+                    >
+                        <span aria-hidden="true">🗑️</span>
+                        Очистить
                     </button>
-                    <button id="tangent2Btn" class="btn tangent-btn" data-tangent="1" 
-                            aria-label="Выбрать вторую касательную (оранжевая)" 
-                            aria-pressed="false"
-                            title="Кликните по графику производной для построения касательной">
-                        Касательная 2
+                    
+                    <button 
+                        type="button"
+                        id="resetZoomBtn" 
+                        class="btn"
+                        disabled
+                        aria-label="Сбросить масштаб"
+                    >
+                        <span aria-hidden="true">↺</span>
+                        Сбросить зум
                     </button>
                 </div>
-                <button id="resetZoomBtn" class="btn btn--primary" disabled aria-label="Сбросить масштаб графиков">Сбросить зум</button>
-            </div>
-            <div class="card__body chart-container derivative-container" role="img" aria-label="График производной DTA">
-                <div id="placeholderTextDerivative" class="placeholder">
+            </figcaption>
+            
+            <div class="chart-card__body">
+                <div id="derivativePlaceholder" class="placeholder">
                     <div class="placeholder__content">
-                        <span class="placeholder__icon" aria-hidden="true">📊</span>
-                        <h3 class="placeholder__title">Нет данных</h3>
-                        <p class="placeholder__text">Загрузите CSV для отображения производной</p>
+                        <span class="placeholder__icon" aria-hidden="true">📈</span>
+                        <span class="placeholder__title">Нет данных</span>
+                        <span class="placeholder__subtitle">График появится после загрузки</span>
                     </div>
                 </div>
-                <canvas id="derivativeChart" style="cursor: crosshair;"></canvas>
+                
+                <!-- Подсветка области (для демо) -->
+                <div id="highlightOverlay" class="highlight-overlay" hidden></div>
+                
+                <canvas 
+                    id="derivativeChart" 
+                    class="chart-canvas chart-canvas--interactive"
+                    role="img"
+                    aria-label="График производной DTA"
+                ></canvas>
             </div>
-            <figcaption class="sr-only">График производной DTA</figcaption>
         </figure>
     </main>
+
+    <!-- Статус для скринридеров -->
+    <div id="a11yStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

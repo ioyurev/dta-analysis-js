@@ -1,0 +1,289 @@
+/**
+ * Dark Theme Styles
+ */
+
+/* =========================================================================
+   DARK THEME VARIABLES
+   ========================================================================= */
+
+/* 
+   Темные переменные применяются только при ручном выборе темной темы
+*/
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-bg-elevated: #1e293b;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  
+  --color-primary-50: #1e3a5f;
+  --color-primary-100: #1e40af;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  
+  --color-success-50: #064e3b;
+  --color-warning-50: #451a03;
+  --color-warning-200: #854d0e;
+  --color-error-50: #450a0a;
+  --color-error-100: #7f1d1d;
+  
+  --color-neutral-50: #1e293b;
+  --color-neutral-100: #334155;
+  --color-neutral-200: #475569;
+  --color-neutral-300: #64748b;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  
+  --color-chart-main: #60a5fa;
+  --color-chart-derivative: #f87171;
+  --color-tangent-1: #60a5fa;
+  --color-tangent-2: #fbbf24;
+  
+  /* Interaction Colors */
+  --color-zoom-bg: rgba(96, 165, 250, 0.2);
+  --color-zoom-border: rgba(96, 165, 250, 0.6);
+  --color-click-feedback: #60a5fa;
+  --color-intersection: #34d399;
+}
+
+/* Принудительная тёмная тема */
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-bg-elevated: #1e293b;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  
+  --color-primary-50: #1e3a5f;
+  --color-primary-100: #1e40af;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  
+  --color-success-50: #064e3b;
+  --color-warning-50: #451a03;
+  --color-warning-200: #854d0e;
+  --color-error-50: #450a0a;
+  --color-error-100: #7f1d1d;
+  
+  --color-neutral-50: #1e293b;
+  --color-neutral-100: #334155;
+  --color-neutral-200: #475569;
+  --color-neutral-300: #64748b;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  
+  --color-chart-main: #60a5fa;
+  --color-chart-derivative: #f87171;
+  --color-tangent-1: #60a5fa;
+  --color-tangent-2: #fbbf24;
+}
+
+/* =========================================================================
+   COMPONENT OVERRIDES
+   ========================================================================= */
+
+/* Chart Cards */
+[data-theme="dark"] .chart-card,
+[data-theme="dark"] .results-panel {
+  background-color: var(--color-bg-elevated);
+  border-color: var(--color-border);
+}
+
+/* Backdrop */
+[data-theme="dark"] .modal::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Loading Overlay */
+[data-theme="dark"] .loading-overlay {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* Placeholders */
+[data-theme="dark"] .placeholder {
+  background: rgba(30, 41, 59, 0.95);
+}
+
+[data-theme="dark"] .placeholder--interactive:hover,
+[data-theme="dark"] .placeholder--interactive:focus-within {
+  background: rgba(30, 58, 138, 0.95);
+  border-color: var(--color-primary-500);
+}
+
+/* Chart Cards */
+[data-theme="dark"] .chart-card__header,
+[data-theme="dark"] .results-list__item,
+[data-theme="dark"] .result-equation {
+  background: var(--color-neutral-50);
+}
+
+/* Inputs & Selects */
+[data-theme="dark"] .sample-select,
+[data-theme="dark"] .file-label {
+  background-color: var(--color-neutral-50);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .file-label:hover {
+  background-color: var(--color-primary-50);
+}
+
+/* =========================================================================
+   ADDITIONAL COMPONENT OVERRIDES
+   ========================================================================= */
+
+/* Modal content */
+[data-theme="dark"] .modal__content {
+  background: var(--color-bg-elevated);
+}
+
+[data-theme="dark"] .modal__header {
+  background: var(--color-neutral-700);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .modal__footer {
+  background: var(--color-neutral-700);
+  border-color: var(--color-border);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .modal__content {
+    background: var(--color-bg-elevated);
+  }
+  
+  :root:not([data-theme="light"]) .modal__header {
+    background: var(--color-neutral-700);
+    border-color: var(--color-border);
+  }
+  
+  :root:not([data-theme="light"]) .modal__footer {
+    background: var(--color-neutral-700);
+    border-color: var(--color-border);
+  }
+}
+
+/* Help sections */
+[data-theme="dark"] .help-section h3 {
+  color: var(--color-primary-400);
+}
+
+[data-theme="dark"] .help-section p,
+[data-theme="dark"] .help-section ul,
+[data-theme="dark"] .help-section ol {
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .help-section h3 {
+    color: var(--color-primary-400);
+  }
+  
+  :root:not([data-theme="light"]) .help-section p,
+  :root:not([data-theme="light"]) .help-section ul,
+  :root:not([data-theme="light"]) .help-section ol {
+    color: var(--color-text-secondary);
+  }
+}
+
+/* Chart tooltips and legends (if Chart.js uses custom elements) */
+[data-theme="dark"] .chartjs-tooltip {
+  background: var(--color-neutral-800);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .chartjs-legend {
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .chartjs-tooltip {
+    background: var(--color-neutral-800);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+  }
+  
+  :root:not([data-theme="light"]) .chartjs-legend {
+    color: var(--color-text-secondary);
+  }
+}
+
+/* Scrollbars */
+[data-theme="dark"] ::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--color-neutral-700);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-500);
+  border-radius: 6px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) ::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+  }
+  
+  :root:not([data-theme="light"]) ::-webkit-scrollbar-track {
+    background: var(--color-neutral-700);
+  }
+  
+  :root:not([data-theme="light"]) ::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-500);
+    border-radius: 6px;
+  }
+  
+  :root:not([data-theme="light"]) ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-neutral-400);
+  }
+}
+
+/* =========================================================================
+   ADDITIONAL ELEMENTS
+   ========================================================================= */
+
+/* Tangent hint text */
+[data-theme="dark"] .chart-card__hint {
+  background: var(--color-neutral-700);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* Loading overlay background */
+[data-theme="dark"] .loading-overlay {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* Main chart placeholder background */
+[data-theme="dark"] .placeholder--interactive {
+  background: var(--color-neutral-700);
+}
+
+/* Derivative chart placeholder background */
+[data-theme="dark"] #derivativePlaceholder {
+  background: var(--color-neutral-700);
+}

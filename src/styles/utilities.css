@@ -1,0 +1,123 @@
+/**
+ * Utility Classes
+ */
+
+/* =========================================================================
+   VISIBILITY
+   ========================================================================= */
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hidden but preserves space */
+.invisible {
+  visibility: hidden;
+}
+
+/* =========================================================================
+   TEXT
+   ========================================================================= */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================================
+   DISPLAY
+   ========================================================================= */
+
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.hidden { display: none; }
+
+/* =========================================================================
+   THEME-AWARE COLORS
+   ========================================================================= */
+
+/* Text colors */
+.text-primary { color: var(--color-primary-600); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-muted { color: var(--color-text-muted); }
+.text-success { color: var(--color-success-600); }
+.text-warning { color: var(--color-warning-600); }
+.text-error { color: var(--color-error-600); }
+
+/* Background colors */
+.bg-elevated { background: var(--color-bg-elevated); }
+.bg-primary { background: var(--color-primary-500); }
+.bg-success { background: var(--color-success-500); }
+.bg-warning { background: var(--color-warning-500); }
+.bg-error { background: var(--color-error-500); }
+.bg-neutral-50 { background: var(--color-neutral-50); }
+.bg-neutral-100 { background: var(--color-neutral-100); }
+
+/* Border colors */
+.border { border: 1px solid var(--color-border); }
+.border-strong { border: 1px solid var(--color-border-strong); }
+.border-primary { border: 1px solid var(--color-primary-500); }
+.border-success { border: 1px solid var(--color-success-500); }
+.border-warning { border: 1px solid var(--color-warning-500); }
+.border-error { border: 1px solid var(--color-error-500); }
+
+/* Shadow utilities */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-focus { box-shadow: var(--shadow-focus); }
+
+/* Dark theme variants */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .text-primary { color: var(--color-primary-400); }
+  :root:not([data-theme="light"]) .text-secondary { color: var(--color-text-secondary); }
+  :root:not([data-theme="light"]) .text-muted { color: var(--color-text-muted); }
+  :root:not([data-theme="light"]) .bg-elevated { background: var(--color-neutral-700); }
+  :root:not([data-theme="light"]) .border { border-color: var(--color-border); }
+  :root:not([data-theme="light"]) .border-strong { border-color: var(--color-border-strong); }
+}
+
+[data-theme="dark"] .text-primary { color: var(--color-primary-400); }
+[data-theme="dark"] .text-secondary { color: var(--color-text-secondary); }
+[data-theme="dark"] .text-muted { color: var(--color-text-muted); }
+[data-theme="dark"] .bg-elevated { background: var(--color-neutral-700); }
+[data-theme="dark"] .border { border-color: var(--color-border); }
+[data-theme="dark"] .border-strong { border-color: var(--color-border-strong); }
+
+/* =========================================================================
+   FLEX
+   ========================================================================= */
+
+.flex-1 { flex: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+.flex-grow-0 { flex-grow: 0; }
+
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-end { justify-content: flex-end; }
+
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }

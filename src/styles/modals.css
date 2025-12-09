@@ -1,0 +1,188 @@
+/**
+ * Modal Dialog Styles
+ */
+
+/* =========================================================================
+   MODAL (using native <dialog>)
+   ========================================================================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  margin: auto;
+  padding: 0;
+  background: var(--color-bg-elevated);
+  border: none;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+/* Backdrop */
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* Animation */
+.modal[open] {
+  animation: modal-show var(--duration-normal) var(--easing-out);
+}
+
+.modal[open]::backdrop {
+  animation: backdrop-show var(--duration-normal) var(--easing-out);
+}
+
+@keyframes modal-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes backdrop-show {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* =========================================================================
+   MODAL STRUCTURE
+   ========================================================================= */
+
+.modal__content {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+.modal__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.modal__header h2 {
+  font-size: var(--font-size-xl);
+  margin: 0;
+}
+
+.modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-default);
+}
+
+.modal__close:hover {
+  color: var(--color-text-primary);
+  background: var(--color-neutral-100);
+}
+
+.modal__body {
+  flex: 1;
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+.modal__footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-neutral-50);
+  border-block-start: 1px solid var(--color-border);
+}
+
+/* =========================================================================
+   HELP SECTIONS
+   ========================================================================= */
+
+.help-section {
+  margin-block-end: var(--space-6);
+}
+
+.help-section:last-child {
+  margin-block-end: 0;
+}
+
+.help-section h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-3);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-600);
+}
+
+.help-section p,
+.help-section ul,
+.help-section ol {
+  color: var(--color-text-secondary);
+}
+
+.help-section ul,
+.help-section ol {
+  padding-inline-start: var(--space-6);
+  list-style: disc;
+}
+
+.help-section ol {
+  list-style: decimal;
+}
+
+.help-note {
+  padding: var(--space-3);
+  background: var(--color-warning-50);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+
+/* Details/Summary */
+.help-details {
+  margin-block-start: var(--space-3);
+}
+
+.help-details summary {
+  padding: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-600);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--easing-default);
+}
+
+.help-details summary:hover {
+  background: var(--color-primary-50);
+}
+
+.help-details[open] summary {
+  margin-block-end: var(--space-2);
+}
+
+.code-sample {
+  margin: 0;
+  font-size: var(--font-size-xs);
+}
