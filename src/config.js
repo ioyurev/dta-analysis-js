@@ -33,7 +33,7 @@ export const CONFIG = Object.freeze({
   
   SAMPLES: Object.freeze({
     'sample': {
-      url: '/sample.csv',
+      url: './sample.csv',
       name: 'Плавление образца Al-Si',
       expectedTemp: 630
     }
