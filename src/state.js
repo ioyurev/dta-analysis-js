@@ -38,4 +38,5 @@ export function resetState() {
   AppState.currentHintIndex = 0;
   AppState.isDemoRunning = false;
   AppState.isDataLoaded = false;
+  AppState.currentSample = null;
 }
